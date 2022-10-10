@@ -1,14 +1,24 @@
->**Note**: Please **fork** the current Udacity repository so that you will have a **remote** repository in **your** Github account. Clone the remote repository to your local machine. Later, as a part of the project "Post your Work on Github", you will push your proposed changes to the remote repository in your Github account.
+### Udacity Nanodegree - Programming for Data Science with Python
 
 ### Date created
 October 10, 2022
 
-### Project Title
-Post Your Work on Github
 
+### Project 1 - Investigate a Relational Database
 ### Description
-It's time to put what you've learned about version control and GitHub into practice! 
-In this project, you'll be simulating a realistic workflow to refactor your previous BikeShare project using Git.
+In this project, you will query the Sakila DVD Rental database. The Sakila Database holds information about a company that rents movie DVDs. 
+For this project, you will be querying the database to gain an understanding of the customer base, such as what the patterns in movie watching 
+are across different customer groups, how they compare on payment earnings, and how the stores compare in their performance. 
+
+### Project 2 - Explore US Bikeshare Data
+### Description
+In this project, you will write Python code to import US bike share data and answer interesting questions about it by computing descriptive statistics. 
+You will also write a script that takes in raw input to create an interactive experience in the terminal to present these statistics.
+
+### Project 3 -
+### Description
+
+
 
 ### Files used
 Git Commands Documentation.pdf
