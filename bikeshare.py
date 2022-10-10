@@ -60,6 +60,7 @@ def raw_data_handler(df):
     start_index = 0
     increment = 5
     
+    
     while True:
         #call the raw_data_prompt_handler function to handle user prompts
         #first argument is set to True to display prompt for raw data input
@@ -336,7 +337,8 @@ def main():
         
         #Pass the dataframe to raw_data_handler function to handle task of displaying more data
         raw_data_handler(df)
-                
+        
+        #promt the user if they would like to restart
         restart = input('\nWould you like to restart? Enter Yes or No: ')
         if restart.lower().strip() != 'yes':
             print('\nGoodbye!\n')
