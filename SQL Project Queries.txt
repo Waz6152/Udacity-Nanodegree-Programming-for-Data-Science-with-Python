@@ -1,0 +1,111 @@
+--Query No. 1 (Used for Slide 1); Question Set 1 - Question No. 1
+SELECT f.title,
+       c.name,
+       COUNT(*)
+FROM film f
+JOIN film_category fc USING(film_id)
+JOIN category c ON c.category_id = fc.category_id
+AND c.name IN ('Animation',
+               'Children',
+               'Classics',
+               'Comedy',
+               'Family',
+               'Music')
+JOIN inventory i USING(film_id)
+JOIN rental r USING(inventory_id)
+GROUP BY 2,
+         1
+ORDER BY 2 ASC,
+         1 ASC;		 
+
+
+--Query No. 2 (Used for Slide 2); Question Set 2 - Question No. 1
+SELECT DATE_PART('Month', r.rental_date) Rental_month,
+       DATE_PART('Year', r.rental_date) Rental_year,
+       sto.store_id Store_ID,
+       COUNT(r.rental_id) rentals
+FROM rental r
+JOIN staff sta USING(staff_id)
+JOIN store sto USING(store_id)
+GROUP BY 2,
+         1,
+         3
+ORDER BY 4 DESC;
+
+
+--Query No. 3 (Used for Slide 3); Question Set 2 - Question No. 2
+WITH sub AS
+  (SELECT CONCAT(first_name, ' ', last_name) "fullname",
+          c.customer_id,
+          p.amount,
+          p.payment_date
+   FROM customer c
+   JOIN payment p USING(customer_id)),
+
+     sub2 AS
+  (SELECT sub.customer_id,
+          SUM(sub.amount) amount
+   FROM sub
+   GROUP BY 1
+   ORDER BY 2 DESC
+   LIMIT 10)
+SELECT DATE_TRUNC('Month', sub.payment_date)::char(7) pay_mon,
+       sub.fullname,
+       COUNT(*) pay_countpermonth,
+       SUM(sub.amount) payamount
+FROM sub
+JOIN sub2 USING(customer_id)
+WHERE sub.payment_date BETWEEN '2007-01-01' AND '2008-01-01'
+GROUP BY 2,
+         1;
+		
+		
+--Query No. 4 (Used for Slide 4); Question Set 2 - Question No. 3
+WITH sub AS
+  (SELECT CONCAT(first_name, ' ', last_name) "fullname",
+          c.customer_id,
+          p.amount,
+          p.payment_date
+   FROM customer c
+   JOIN payment p USING(customer_id)),
+
+     sub2 AS
+  (SELECT sub.customer_id,
+          SUM(sub.amount) amount
+   FROM sub
+   GROUP BY 1
+   ORDER BY 2 DESC
+   LIMIT 10),
+
+     Sub3 AS
+  (SELECT DATE_TRUNC('Month', sub.payment_date)::char(7) pay_mon,
+          sub.fullname,
+          COUNT(*) pay_countpermonth,
+          SUM(sub.amount) payamount
+   FROM sub
+   JOIN sub2 USING(customer_id)
+   WHERE sub.payment_date BETWEEN '2007-01-01' AND '2008-01-01'
+   GROUP BY 1,
+            2),
+
+     sub4 AS
+  (SELECT pay_mon,
+          fullname,
+          pay_countpermonth,
+          payamount,
+          payamount - lag(payamount) OVER (PARTITION BY fullname
+                                           ORDER BY pay_mon) AS difference
+   FROM sub3)
+
+SELECT pay_mon,
+       fullname,
+       pay_countpermonth,
+       payamount,
+       difference,
+  (SELECT sub4.fullname AS "paid_max_difference"
+   FROM sub4
+   GROUP BY 1
+   ORDER BY MAX(difference) DESC
+   LIMIT 1)
+FROM sub4;
+                              
